@@ -1,0 +1,52 @@
+(* SOLUTION FOR PART 1 *)
+text = "1abc2
+pqr3stu8vwx
+a1b2c3d4e5f
+treb7uchet"
+
+parts = StringSplit[StringReplace[text, RegularExpression["[a-zA-Z]"] -> ""]]
+
+extractf[inpustr_] :=  ToExpression[StringTake[inpustr, 1] <> StringTake[inpustr, -1]]
+Total[Map[extractf, parts]]
+
+
+
+
+
+(* SOLUTION FOR PART 2 - ATTEMPT 1 *)
+text = "two1nine
+eightwothree
+abcone2threexyz
+xtwone3four
+4nineeightseven2
+zoneight234
+7pqrstsixteen"
+
+cleanf[inpustr_] := StringReplace[text, {"one" -> "1", "two" -> "2", "three" -> "3", "four" -> "4", "five" -> "5", "six" -> "6", "seven" -> "7", "eight" -> "8",  "nine" -> "9",  RegularExpression["[a-zA-Z]"] -> ""}]
+parts = StringSplit[cleanf[text]]
+
+extractf[inpustr_] :=  ToExpression[StringTake[inpustr, 1] <> StringTake[inpustr, -1]]
+Total[Map[extractf, parts]]
+
+(* this solution didn't work for the large input.. probably because strings like eightwothree should be converted to 823, not 83 *)
+
+
+
+
+
+(* SOLUTION FOR PART 2 - ATTEMPT 2 *)
+text = "two1nine
+eightwothree
+abcone2threexyz
+xtwone3four
+4nineeightseven2
+zoneight234
+7pqrstsixteen"
+
+(* addressed the problem in attempt 1 by using 2 passes: the first one keeps the last letter of each spelled out number identified *)
+p1 = StringReplace[text, {"one" -> "1e", "two" -> "2o", "three" -> "3e", "four" -> "4r", "five" -> "5e", "six" -> "6x", "seven" -> "7n", "eight" -> "8t",  "nine" -> "9e"}]
+cleanf[inpustr_] := StringReplace[p1, {"one" -> "1", "two" -> "2", "three" -> "3", "four" -> "4", "five" -> "5", "six" -> "6", "seven" -> "7", "eight" -> "8", "nine" -> "9", RegularExpression["[a-zA-Z]"] -> ""}]
+parts = StringSplit[cleanf[text]]
+
+extractf[inpustr_] := ToExpression[StringTake[inpustr, 1] <> StringTake[inpustr, -1]]
+Total[Map[extractf, parts]]
