@@ -1,0 +1,638 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 13.2' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     36283,        630]
+NotebookOptionsPosition[     35540,        612]
+NotebookOutlinePosition[     35947,        628]
+CellTagsIndexPosition[     35904,        625]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+  "text", " ", "=", " ", 
+   "\"\<1abc2\npqr3stu8vwx\na1b2c3d4e5f\ntreb7uchet\>\""}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"parts", " ", "=", " ", 
+   RowBox[{"StringSplit", "[", 
+    RowBox[{"StringReplace", "[", 
+     RowBox[{"text", ",", " ", 
+      RowBox[{
+       RowBox[{"RegularExpression", "[", "\"\<[a-zA-Z]\>\"", "]"}], " ", "->",
+        " ", "\"\<\>\""}]}], "]"}], "]"}]}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"extractf", "[", "inpustr_", "]"}], " ", ":=", " ", 
+  RowBox[{"ToExpression", "[", 
+   RowBox[{
+    RowBox[{"StringTake", "[", 
+     RowBox[{"inpustr", ",", " ", "1"}], "]"}], " ", "<>", " ", 
+    RowBox[{"StringTake", "[", 
+     RowBox[{"inpustr", ",", " ", 
+      RowBox[{"-", "1"}]}], "]"}]}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"Total", "[", 
+  RowBox[{"Map", "[", 
+   RowBox[{"extractf", ",", " ", "parts"}], "]"}], 
+  "]"}], "\[IndentingNewLine]"}], "Input",
+ CellChangeTimes->{{3.9104462760664372`*^9, 3.9104463772773*^9}, {
+   3.9104464571350284`*^9, 3.9104464884244876`*^9}, {3.910446540943678*^9, 
+   3.910446561532524*^9}, {3.9104466593849115`*^9, 3.910446661087639*^9}, 
+   3.910446701328291*^9, {3.9104467992280607`*^9, 3.910446834719822*^9}, {
+   3.910446939437751*^9, 3.91044694353055*^9}, {3.910447062343566*^9, 
+   3.910447062609125*^9}, {3.9104471929967175`*^9, 3.9104471937309885`*^9}, {
+   3.9104472281102467`*^9, 3.910447231796072*^9}, {3.9104473920717273`*^9, 
+   3.9104474020702477`*^9}, {3.9104474341589136`*^9, 3.910447438720682*^9}, {
+   3.9104474706872225`*^9, 3.910447472952344*^9}, {3.910447512468169*^9, 
+   3.910447551633974*^9}, {3.910447632976287*^9, 3.9104476361631613`*^9}, {
+   3.9104477891403522`*^9, 3.9104477895621634`*^9}, {3.91044784281627*^9, 
+   3.910447844331661*^9}, {3.910447881523274*^9, 3.910447925442579*^9}, {
+   3.910447962656107*^9, 3.9104480140698195`*^9}, 3.9104482262646494`*^9, 
+   3.910448265706378*^9, {3.910448298958813*^9, 3.9104483187383823`*^9}, {
+   3.910448352657623*^9, 3.910448359578162*^9}, {3.910448441806618*^9, 
+   3.9104485244251275`*^9}, {3.9104485998086605`*^9, 3.910448628900637*^9}, 
+   3.9104487940573034`*^9, 3.9104489546030293`*^9},
+ CellLabel->
+  "In[227]:=",ExpressionUUID->"3fc68a69-d7b9-4f5d-b550-5c5f70604e38"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+  "text", " ", "=", " ", 
+   "\"\<two1nine\neightwothree\nabcone2threexyz\nxtwone3four\n\
+4nineeightseven2\nzoneight234\n7pqrstsixteen\>\""}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"cleanf", "[", "inpustr_", "]"}], " ", ":=", " ", 
+  RowBox[{"StringReplace", "[", 
+   RowBox[{"text", ",", " ", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"\"\<one\>\"", " ", "->", " ", "\"\<1\>\""}], ",", " ", 
+      RowBox[{"\"\<two\>\"", " ", "->", " ", "\"\<2\>\""}], ",", " ", 
+      RowBox[{"\"\<three\>\"", " ", "->", " ", "\"\<3\>\""}], ",", " ", 
+      RowBox[{"\"\<four\>\"", " ", "->", " ", "\"\<4\>\""}], ",", " ", 
+      RowBox[{"\"\<five\>\"", " ", "->", " ", "\"\<5\>\""}], ",", " ", 
+      RowBox[{"\"\<six\>\"", " ", "->", " ", "\"\<6\>\""}], ",", " ", 
+      RowBox[{"\"\<seven\>\"", " ", "->", " ", "\"\<7\>\""}], ",", " ", 
+      RowBox[{"\"\<eight\>\"", " ", "->", " ", "\"\<8\>\""}], ",", "  ", 
+      RowBox[{"\"\<nine\>\"", " ", "->", " ", "\"\<9\>\""}], ",", " ", 
+      RowBox[{"\"\<zero\>\"", " ", "->", " ", "\"\<0\>\""}], ",", "  ", 
+      RowBox[{
+       RowBox[{"RegularExpression", "[", "\"\<[a-zA-Z]\>\"", "]"}], " ", "->",
+        " ", "\"\<\>\""}]}], "}"}]}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"parts", " ", "=", " ", 
+   RowBox[{"StringSplit", "[", 
+    RowBox[{"cleanf", "[", "text", "]"}], "]"}]}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"extractf", "[", "inpustr_", "]"}], " ", ":=", " ", 
+  RowBox[{"ToExpression", "[", 
+   RowBox[{
+    RowBox[{"StringTake", "[", 
+     RowBox[{"inpustr", ",", " ", "1"}], "]"}], " ", "<>", " ", 
+    RowBox[{"StringTake", "[", 
+     RowBox[{"inpustr", ",", " ", 
+      RowBox[{"-", "1"}]}], "]"}]}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"Map", "[", 
+  RowBox[{"extractf", ",", " ", "parts"}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Total", "[", 
+   RowBox[{"Map", "[", 
+    RowBox[{"extractf", ",", " ", "parts"}], "]"}], "]"}], 
+  "\[IndentingNewLine]", "\[IndentingNewLine]", 
+  RowBox[{"(*", " ", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"this", " ", "solution", " ", 
+       RowBox[{"didn", "'"}], "t", " ", "work", " ", "for", " ", "the", " ", 
+       "large", " ", "input"}], ".."}], " ", "probably", " ", "because", " ", 
+     "strings", " ", "like", " ", "eightwothree", " ", "should", " ", "be", 
+     " ", "converted", " ", "to", " ", "823"}], ",", " ", 
+    RowBox[{"not", " ", "83"}]}], " ", 
+   "*)"}]}], "\[IndentingNewLine]"}], "Input",
+ CellChangeTimes->{{3.9104488790894737`*^9, 3.910448893665027*^9}, {
+  3.9104490057200427`*^9, 3.9104490134529076`*^9}, {3.9104490655219865`*^9, 
+  3.910449132370225*^9}, {3.910449253976733*^9, 3.910449294430114*^9}, {
+  3.910449378002781*^9, 3.9104494715040884`*^9}, {3.910450322867056*^9, 
+  3.910450323132628*^9}, {3.910450523464763*^9, 
+  3.910450560981615*^9}},ExpressionUUID->"4c997c26-8452-4e6b-b3b7-\
+cdef81201dc8"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+  "text", " ", "=", " ", 
+   "\"\<two1nine\neightwothree\nabcone2threexyz\nxtwone3four\n\
+4nineeightseven2\nzoneight234\n7pqrstsixteen\>\""}], "\[IndentingNewLine]", 
+  "\[IndentingNewLine]", 
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "addressed", " ", "the", " ", "problem", " ", "by", " ", "using", " ", "2",
+     " ", 
+    RowBox[{"passes", ":", " ", 
+     RowBox[{
+     "the", " ", "first", " ", "one", " ", "keeps", " ", "the", " ", "last", 
+      " ", "letter", " ", "of", " ", "each", " ", "spelled", " ", "out", " ", 
+      "number", " ", "identified"}]}]}], " ", "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{"p1", " ", "=", " ", 
+  RowBox[{"StringReplace", "[", 
+   RowBox[{"text", ",", " ", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"\"\<one\>\"", " ", "->", " ", "\"\<1e\>\""}], ",", " ", 
+      RowBox[{"\"\<two\>\"", " ", "->", " ", "\"\<2o\>\""}], ",", " ", 
+      RowBox[{"\"\<three\>\"", " ", "->", " ", "\"\<3e\>\""}], ",", " ", 
+      RowBox[{"\"\<four\>\"", " ", "->", " ", "\"\<4r\>\""}], ",", " ", 
+      RowBox[{"\"\<five\>\"", " ", "->", " ", "\"\<5e\>\""}], ",", " ", 
+      RowBox[{"\"\<six\>\"", " ", "->", " ", "\"\<6x\>\""}], ",", " ", 
+      RowBox[{"\"\<seven\>\"", " ", "->", " ", "\"\<7n\>\""}], ",", " ", 
+      RowBox[{"\"\<eight\>\"", " ", "->", " ", "\"\<8t\>\""}], ",", "  ", 
+      RowBox[{"\"\<nine\>\"", " ", "->", " ", "\"\<9e\>\""}]}], "}"}]}], 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"cleanf", "[", "inpustr_", "]"}], " ", ":=", " ", 
+  RowBox[{"StringReplace", "[", 
+   RowBox[{"p1", ",", " ", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"\"\<one\>\"", " ", "->", " ", "\"\<1\>\""}], ",", " ", 
+      RowBox[{"\"\<two\>\"", " ", "->", " ", "\"\<2\>\""}], ",", " ", 
+      RowBox[{"\"\<three\>\"", " ", "->", " ", "\"\<3\>\""}], ",", " ", 
+      RowBox[{"\"\<four\>\"", " ", "->", " ", "\"\<4\>\""}], ",", " ", 
+      RowBox[{"\"\<five\>\"", " ", "->", " ", "\"\<5\>\""}], ",", " ", 
+      RowBox[{"\"\<six\>\"", " ", "->", " ", "\"\<6\>\""}], ",", " ", 
+      RowBox[{"\"\<seven\>\"", " ", "->", " ", "\"\<7\>\""}], ",", " ", 
+      RowBox[{"\"\<eight\>\"", " ", "->", " ", "\"\<8\>\""}], ",", "  ", 
+      RowBox[{"\"\<nine\>\"", " ", "->", " ", "\"\<9\>\""}], ",", " ", 
+      RowBox[{
+       RowBox[{"RegularExpression", "[", "\"\<[a-zA-Z]\>\"", "]"}], " ", "->",
+        " ", "\"\<\>\""}]}], "}"}]}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"parts", " ", "=", " ", 
+   RowBox[{"StringSplit", "[", 
+    RowBox[{"cleanf", "[", "text", "]"}], "]"}]}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"extractf", "[", "inpustr_", "]"}], " ", ":=", " ", 
+  RowBox[{"ToExpression", "[", 
+   RowBox[{
+    RowBox[{"StringTake", "[", 
+     RowBox[{"inpustr", ",", " ", "1"}], "]"}], " ", "<>", " ", 
+    RowBox[{"StringTake", "[", 
+     RowBox[{"inpustr", ",", " ", 
+      RowBox[{"-", "1"}]}], "]"}]}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"Map", "[", 
+  RowBox[{"extractf", ",", " ", "parts"}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{"Total", "[", 
+  RowBox[{"Map", "[", 
+   RowBox[{"extractf", ",", " ", "parts"}], "]"}], "]"}]}], "Input",
+ CellChangeTimes->{
+  3.91045062246671*^9, {3.9104507051393633`*^9, 3.91045074387479*^9}, {
+   3.9104507873625546`*^9, 3.9104507877529507`*^9}, {3.9104508644346347`*^9, 
+   3.9104508895388374`*^9}, {3.9104509485274725`*^9, 3.910450985660334*^9}, {
+   3.910451031057339*^9, 3.9104510591140685`*^9}, {3.9104510911543446`*^9, 
+   3.91045115073989*^9}, {3.910451295704407*^9, 
+   3.910451341788789*^9}},ExpressionUUID->"ae8c5112-e564-4e98-b1d9-\
+c176a2cd9d2a"],
+
+Cell[BoxData[""], "Input",ExpressionUUID->"92065d6b-ec4d-4f54-a6cc-e06d409d0591"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+  "text", " ", "=", " ", 
+   "\"\<nkzjrdqrmpztpqninetwofour1znnkd\ns5sevenxrdfr4mhpstgbjcfqckronesix\n\
+3four4\nsfdrtpvspsixsn5zbqmggb8vgkjseight\n72666gxzflnsfqmndjdscvqmcqls5\n\
+hvqgbssr46four1cdcjxcdcp\nzpjvvcbeightthree1bcnvjzbnqseven\n\
+jqbjxdkkveightrtktnsr92sevenmztdg\nthree3ninefive\ntwosevennnine6467\n\
+fjrzk9rfpqtbrc1bzfclczqxq\nninegkftwo29seven\n\
+eightone7threenl7mtxbmkpkzqzljrdk\ntwothree6vpnvvnshn\nvvhtbjjrr6xghmzf\n\
+bfjtdslkdbthree4jvvonezqdthreesrghnnbsix\nkkbhh5fivepvhzhdsvxvnkrn4\n\
+4qsqr235twogl21\nv2seventhreezjfour6\n38gfqdpkfhdonespqbckbgkkzhgnbqgslkhfl7\n\
+dtwoneeight6llzcxssgrdfjmjvfbvtwo9\nsixsixgnpprvjdkgvqmr1\n7sqthfchpjklpn\n\
+foureight7hl111rznjfh\n9six2threefiversbsc\n8six1ninezjsix\n\
+6threezjmclknqcztwocfiveninextpdq1\ngsdsr2seven51\nvtgdx5\n\
+bkmsrzq71vtkrmjqcvfourheight\neightnine9six\n85mklcmpx1\nsix3four\n\
+five5hqbppzmszhzthmh1\n2ctfonekpns\nllljztzffjlsktwogsjgbzvsp8ninefourg\n\
+4rplhrnglj7oned35\nsevenqnlbrpgone7\n\
+bcmvrhbgfourcrgxrseven4eight1ptmfzhpqcnine\nrkqztsqj2cjfsbrvcmrsixhgbhdone\n\
+two2zfrcfhsl\nfourfournxdsfx6eightnine9\nv4ninecdtwohxmpj\n2378hcrs\n\
+shhbgk74sevenrzknghzsk\n4sevendeight2\n\
+bvjdfthreefive4pfxfvcxc6seven4zjkxdtcjr\n2seven4three239kmjzfhbgxxmqv\n\
+sixfourd7\nhxkkdnjkbmftmone1npmqbnx\nrsxvqjbqx2bzprkml2\n8twothree8dzqbrvdx5\n\
+xqm9\n6six8dnfbs9qlxkfrcrckmfrjgcxg\n822\neightmbhfrxztcgqbfj6threetwo\n\
+five8grcllvz\noneninefive2klzgbdvvjbgnxkrp\n3bvlpmmltpr9zpxmbgslfhgtmtx\n\
+16439\n5lglzqf2sgvshzjdmpzxldnkgzlrbvvmfsk\nfour4rjrkzvfive2cfl7fourfive\n\
+eightv59six7zrczcnkfivejpqxx\nhzgrkrbmjmzhpfkfgg5\n5rjvdsfourtwo8\n\
+938cmftxkv8sixseven\n973threenjtl4two5\n4r9gpfmjnseven\n\
+threesixmmbkxpm7six69v\ntwo369j\n5964fttlsfhjk\n14ppncqfoureighttwo8nnktcn\n\
+3gdfclsxmrfourcfznxqnceighttwo\n2cvtbpsbbhbzrxmp\n967\n\
+2five7xrbfrpjdn6kkrdxt4cqfnhlkl\nvtpbxjl3\n\
+sixprfsqseightsevendonerxmphzl6cgtpgbgtjs\n32ninethree\n59hngnqrmqjbbtrtrzplg\
+\nsevenone39sixsix41\nfeightwo5\n8sixsixrcbvkllpjsnbcnvvsktwo7one\n\
+2fourleightdsvskbpmlfour\ncdfkddlnine34frsshqsevensevenfourqf\n\
+89clszfjqlffive5s\n1tdjxtz723zkhptcxnine\nczt7hkjdbpkpdvfourthree4cfmqhxfcxz6\
+\n76twohglrflhmmqkxrpfszpxhjs56\n4sixpfv\nfivetqbfjxsjzp7\nfiveh4one9qkgnqf\n\
+6czjmgdlckr6sevenonegvtpmgz6\n52one\nfour53twofivefivethree7\n\
+four69sevenjkfqnhqlfkcnfive\nkpxr4nxcmjcv21599\n1mvgdm7xxnqzptrphg\n\
+onezmhzdlqczk82eight\n94599twonine\nfour9nine\nplbrvdlmfjqeight329nine\n\
+8dhpq2bztlqctgzqhkqtlphnkrgpdmtwoeight\neightddscnrvshonexntjctspnnsix1\n\
+hxjhsc4fivexcbjbsix\n863\nnine95fivethreer6\ntwo7tcnzbbqnfr427\n\
+threethreeeightzvfsznine5eight7\ncrvhlfone7xsqhkshpsix2nine73oneighttq\n\
+qcqzrfgninejkrnbdg9two7zbsglmznkjseven4\nnqvskpgnlk1fourrhnzrf4\n\
+4nhvxsstxvtndbpmntpkmeight6\n3fivenine18\nrloneight124\nxrzk8nine\n\
+lzhpftwo3qqzkjhxjdt\n8nine6\n8fgxllqqpcffive29jfdpf\nsixnine57shvscktg46\n\
+nineqjznjltskmq98mfour\nnine9gzglcmhccnone\n66trvcdsnzn\n\
+onevzsznhrvxmpkpxgfourfphttxc2\npfkcvxgmjfournine4cjtpqbsnsixgctm2\n\
+3nj7fivegmgbbfrhf\n9two479sevenn7fqjk\nthree4193\n622eight9gncbvhjvglgmb\n\
+fvbsmrrxmjthree43\n3cpn4xk\n7five6six814nineoneightqbb\nmxc91eight\n\
+mpbxhspkfgslgptm6\nfpfkn7dbpsjxksnk6xkqkfhthree\nrl5flvbsbnqnfgggkq7\n\
+lt4fivebvhtvld7ninetwohnplchrbvdmf\none3dgvngvtwoeightonefivefive\n\
+27sevenvkmqnmqtwochcchnpkeightrgcpdsvvrg\nrr985\n5csrtvjmjzs391sixtwonef\n\
+ninepsdseven23\nfour48eightfourtwo\ntwothree4fivetwo4lxscf\n\
+856twoqhsjtonebqrlkzqn1cd\nsxvd5t7\nprkjfourhpdpxlvlnmz6onetl1\n6one3cgxhd\n\
+nzeightwofourmz4\nlfrnfdkgsixeight2hnlzksmjrsqjmvnmk\n4jddtplseven\n\
+four7onefivenine16\n93qd9svlnnskq8eightthree\nbxsrknfournhqmqzjxmsix5nineb\n\
+9eightfour\nfive9jpzgnggzjpsk42dx\n9ht5bxqkdmxmbfonesix\n771f412n6\n\
+tpxmjxd28onefrn9hnmztsmxsmctpdxjh\nmcmtzjcgmrlgqqrgvc53one9\n6sevensix637\n\
+hp5fivetwohqnineeightonedxbdzzlnv\ntwoone89\n2bsrxhzdsix8threefive7zv\n\
+1sevenfivevjsixqhzlf35\nmcplj8fxzgcfivejstdjq\n\
+8two9gvpqzplflhlkjbtvskcfsixthreeeight\n25five25s71four\n2one3eighteighteight\
+\nps75three6jxdb5\n35fourfivexxqkrbb\n35hjvkldnxhdtknflseven68pvtjt\n\
+rxs5hvjcngzzmjzvthreej9gsxgfkbf\n87n239jclzrttkmx4\nfour98nine\n\
+eightsix3nine3pqgtwo\n4hbpqhgone3ncnine\n7pfgdmpsn1sixglfvt\n\
+4khktqfqjdqssjpnhmtgffour7hzztx\n3n\nsix9jhnloneightf\n\
+1ksevensixzmrhsszlngfiveztbkqs\nfoureightfhvrmq8three7\nfrzmprnh6z\n\
+1fck1ngpninetdpninefive\n9hgfivegtnxfsptpgvmqjrxp\n\
+9nine8ktxtnrlfourvhrseven52\nfiveeightjjqninetwoseven3\n7pbmll4two\n\
+sevenlsvddqsixsixbkmtx9njqf1nine\nh28rtrjz8dctpxdnh\ntwo12fjonenineszxmj\n\
+seven49ltnsm\njqsix6two\n54sixhxzkbh\nkg2msbkrtltwo9\n\
+8xplcnjxfthreeeightthree\nvdxvvtone81one2\n93five36nine5pcbsfr4\n\
+fourfour3six7tj7hgdms\n4dnlcnlxlhzblvkjhzpt95fiveggkv\n48four8\n\
+tf71pkcknhlnxhrthreetwo\n7sixsevenm\nhgtkrfcf9\njlzxqbsix4qsixtzrg\n\
+1mfqldeightonethreeonetwo\n2eight2bvrltnrthree81fouroneightjfc\n\
+4b4nbtvcnczgpdvqpjqfqstzvctkxneightsgtmm\nninexxcmnhjgs8eightone86\n\
+7eightfiveeightfoursixthreernhsvc\nfive9vnnqjjklveight2six632\n\
+four4qksevennine\nthreesixfiveqfive3\n8eight8eight4srcc6seven\n\
+four13onenineffhhdsmkmq6\n2eightghhrz4gqbsgqz2sevenfour\n\
+pnrsdbmbthsix5hrpfrqkdfgone\nxsix1tctsixtwonevz\n\
+84qhpkmbjnsb2sevengonetwoppgqxtn\n96223\n9bk\nzggvthree2nineklhzrltwocxtkgbdt\
+\ndxbpjgoneqhrmqqmpdcfl31\n9ph8gtzxkzjqmvmfk\nlqg6\nfive83sevensix3nine\n\
+nine1three\n15eight131blnjkteightworr\nxgdmcrgfkqeightsevensevenflzvzcss1\n\
+86nine5four\n1six5bsl4\nnrkkzhktjz77threetvmrklnhvfqkfqgbczlr\n\
+xpdbfhpxns6zcsphqdtt34nqp\n8twoeight552mgvtxcf\n\
+9threethreetwovrzkcgzhthreetwo\n6onexjcxschzgb3468\n7hxtwo\n\
+fzxmfkhbzsprgbx97vxlzzrkn\nninexdvvnseven4\n\
+eight8fourfoureighttwo7hpvmjfdgcjcrp\n5lqdlzqcqzmtgdfrpg6xbtgn\n4rphgjktmf4\n\
+84threekclvc1twonine\n2tfsmnzh3qxpcknskhdjhfppc\n\
+7rjzbvjjfmbfivesevenvlrgxxdvk\n5tzseven8\n37rssqhthreesevenone\n\
+rdfivebtsbtrqmqm6\n9nine9fourzr4n2\n54kddhldrdvdxggxpkeight2\nfive4lgtgpcrj\n\
+8gdqbjxdfsf\nfive4ttz\n8fourjrjvdhnpclgjc\n957five\n3fiveseven\n\
+xhkmsrdrxvqshclfdlninebvjzsgfrmlkxlfour91\n9eight1one9oneshm\n\
+sixctmfxcpxvxlkcpr3threeoneh\n3nine7two\nmmthreecstffvvqx8vbmlmpkxsm\n\
+djlxhn48gvs\nkpkpx1onenine\n67two75nine5twotczxddjz\nmtstwone8\n\
+cjfzmrjfk2jzlnqcffsevenfivethreeseven\nckqqbeight9tk\n5threetwo9\n4ninesix\n\
+8rvvrsxcbjxgtcczcrcnhx1\nsixnine67gzlcqbvn9six\nsix7fourthree9\n\
+ghpsh6mtfcxjfbqsdzmzqjssix2zkjrrhrd\n5ninefive\nfourseven5\n\
+7onepmgddpngxseven1\nkcbzf9\nmqgoneightgrhp82\nfgnsfour7two\n\
+tc2nnrqmtpqqxfour6\ntwofour6eightseven8tworccql\ntwo72scpqmfdvone\n\
+41four87fivefoursix7\nninetvpgphtp27jxxnjtqdlqtjpfnsix\n97vrbqtrfgjmrrhrshzr\n\
+2fgbrbzmv5one4fivefive1eight\nlb65xfdkjfivegcgrr\n5ffpxzhzcnmzdtsix\n\
+jhhklldghbrlpjklpkmmjmfourxmlqhfg2jxzxbqxhdtwo\n38fivetxvlqfrkhsztlpp2nine\n\
+9hfftvfnggg6vvrmkkfour5ninesrt\nrhf9oneninekhkbnmj8one\n6fourthreethreelfqvf\n\
+mjlxz7threeszjsbrmbkfourfiveqskmcjzjseven\n119onethree\n72seven\n6817\n\
+4fourfive6eight396\nclldsntn4oneseven2cdbknxbcxjszkv\nsevennine8\n7fournrzsh\n\
+six4cbptcrqrxvbd\n9fourggbtccdmlfrbhgggmdfhfivejddmqvdtwo\n\
+39tpskfourjddhhtglsninefour\ngpxqnqhvmpone5bhllnseven\nkkjfsmtcjvg6tdfngq\n\
+nine4bdvttt5652\n9szdqjl68seven12\nponeightone6\n2sh5jmgmqbxsix\n\
+kfqkdtrnzfivethreezmbpz1kgddhhqxxq\n6mnkjfszdtdqfive5one\n\
+ggqnz9jrpvnszftwodntslxcxcthreetwo\nfour7two89nine\n132twofour\n\
+bghnineqfourjq5\nseven58tbqhgl961\nthreeznrcdmjx8\none692\n\
+9one66grqbdpthhrf19pv\nthree9threefivefive\n8dqgrchqkdbcnxrzfour\n\
+grqvzbsdone119\nglhdzhlgnjkkxtwo9eightwosqs\nthree4five4\n\
+5phtwofive1kghbsthsmntwossztnh\n7nvfsdjgclhone6ninexxlvvhlnvkdhkqgnk\n5nhqd\n\
+vcxmllvgr6bnbssblhvhxx\nctgcmpthlqzjrdbgjhhlqsnklbxqgsgckvcbhd46eight\n\
+qrqone93mqnfhhxkfivegzv\nfoursixfivecsvpxqbct7threelrgbxz\n\
+qbbcdvcg75mkcnpsrtnxthree3qvbhgrmctk\nhcspgtmxczhclq78onenine\n\
+8oneninefourvfthrhthree\n4jmhrthvjxljpvp\nthree17two\n\
+xhtwonepxntwogpqxgfxqkvrh7seven\none28fivesixthreeseventhree\n\
+one6two5twoeight\nfive8nkfhnxlg\nvzronefivegnzhjsjftzone8three\n3c4\n\
+8two88thfsth3213\nkdpckz7hfzrqs97kdt\n399\ntpzv4seven\nzxjpsfive4dp19\n\
+491qjcsn9pxkbpf5lkzjmjr\nsspbvqtp6oneqnnfive\n96mmbs\n\
+sixsrvxrdl8vlqcpfourhjkjk\nclggtwo2\n6lrpf4\nrhgpskfkbdsxm3jpqs\none8two3\n\
+six776\ncsksfour8five6nine1\n7zlpmzplh4\ntwofour2flrdhfh\n\
+cvrnvjzdgjglfmshmjfknhrbfouronescvcxdvczg66mfhnbgks\ntwo26\n2two4\n\
+sgsxnnxxjdhfxhneight31vpjr8sf\nnrjkbbdzkkgtxcsdkc5\n\
+9trlgrcbrhhzjkzhrrlgknthreefgmxvceight\nlkbmq53sevenninetwo53rx\n\
+bxhtwo4fiverxdrone\nqxbxndzzrlone941rleightkqfdvdps\n7189fivezx\n\
+bqmfctlfr5vfjzkpcbzgoneseventwohmnzgzpthree\nkrbxccqsmlfour4\n\
+threetwoninefbvs1thldjh8\nbrzpkk2zvbpfzthree4hlhfbtchpl8fivenine\n9jxjflpcpb\n\
+5sxcjjq977zzxjhfcsgthreeeight\n61sevenseven9gbgnh\n36vchhqdqppmcnsjmjjtffour\n\
+27rkbpslsg8d\n57twofivefive56\nzq984\nxktwo83six7sevenghvsgjnhvjone\n\
+nineeightmzhp785hphfive\nfourdkkqztwo5sixthreepjlkvgmponefive\n\
+two4hjhtsxvpd5t\nsevendsjdkpxpqhrjdd43pblvslgtb\n4jzkklthree34tltfvh\n\
+6three85szgdcqjdbnone7\n5seven9vlxgvpsixtdxssnlnsj991\n\
+ninefourjlvvnhzkdvpxphxthreeone37sxcfc\n24sevenninenhgbhnine68\n\
+tvdfcmjfqmjpsq3zxjlhpb49\nqbxgkrb9426\n462threeeight5reight\n\
+15threeeight9rnllzhrhttbsix\nqdjlvdvmqsl1jpscsix\n6four579qmfbcvhq\n8m38\n\
+2bgng5shfdzdczbvjtjlxseven3\ncgfsgqeightkvkjgpllcnzmfive264\n\
+vdrrfnlxpfgfcmxqrcgn1qrgppzxfhtdnhgrvcdvfcnine\n8four45xqqpbjb11eight\n\
+76txvbjngrbmmjssztpchrvxn7\n9hjvbzxsmszc1xninefour\n4fourthreevtxqmhpgxvtxflt\
+\n7threetndgrtbzheight63sd\ntwo8kmrlvxvqlzsixgtbbtpg65fpj\n\
+jfkkr5423bbqgbqzdhqrfive\nfourvbhsl393\n3kfctvlns264\n\
+onejvcljdgxlkqbzxkthreesevenfive4\nhtgsddp487stjmxcgsix\nsix3five53fourone\n\
+rvkzbqp9lcpqbdnqqjfppv3\nonefivethree2tldqjxmrks1nine\nblccqs1\n\
+three9mtthmnzhlhzk7hrkplfpqq2four\nlcrcrxvzqp3eightfour9\nmqmvfffour13\n431\n\
+75five\n7zjmdrqmsbz65476\n9gvsix28\nkzcqqmfdf8two1gqsevenjrqpvpzh\n\
+47hsckckcxtnbdrbk4ninefive\n8rpshgfxv929vsfmlqsl3six\n\
+pnqmreightfmcffive9seven1\n9ninesix\nseveneight987\n\
+sixnine1cfltxqcthcqptwosdkfl\nzktfqvfsevensxmdrthree8xrdkglj\nthree681t7\n\
+fmfr3five1fivedmngqmtrs\ntmx38sixksmfzrkrtn\nninenine18\n\
+4sclfsrfive73fivejprvmzhvlp\neight38\nxxvgxdnxzk8xdpcjfkqjrrrfn7j\n\
+ffrjtvntsix2rhxkkpbtpnkdttbhx1\n516sevenseven9jpdklpfn1\n\
+4dbsfcvgvmlppgs4chzxpvqfqdfvmqvfsmdvz\nvtlgqsdj6three5two8k\n\
+65fivelrdtcsixtwoneql\n4twoeight77two\n8nine1r5\nsix4nz61qxrgr8v4\n3341\n\
+kksh2\ntwofourfourz144\neightfourtfnhmz23vr\nseven11qxnhdkczvlfour\n\
+nineqdgkxjdjrdh1lcsv\none4sixfszjddf6stmmhfkds1\nsixcd39ttsfctrt2xl2\n\
+xzbqhlqv6h4\ntvtwonepfcssknlqm8two9eighttwo4\n\
+vgmpkdvsdnvsjfbtwo6ninesevensdrlbqqrzg\n5788one4seven\nfive5rccbvbk3ccgnzn34\n\
+9dr35sevennine\n2xmrsvlkfour1tmszk\noneeight4two1scdhclbllljhxkq\n\
+5pffnxjvxcrmdzffm\nfivesixjfive7eight2cpjklvqsix\n\
+1gfvcnssixnpqpsh7gjcppxpntwo\nxsfbzkkz3zvh\n2184ninesevenfour\n\
+3g7xxzzghflvghnm4\ntwoonefive87mjsqmqddhvlz3one\ntwo1nxhfgrsixdnone8one\n\
+twonrrrldn615kdclqjveight7two\n6eightqmrgrbp63\ntmthreetwobnbccjxgpz7\n\
+8ninerseven721v\ntwoqdjpssix75tonetwothree\n3khjkhbgzdgjqvvnrchqtg63vjt5\n\
+hbqlreight18\nmkthreefoureightfive2tnccxvltm\nthreefive195\n7ln\n\
+8fourfoursixrvcthreeldzfxjj\n7rjbdptnllcbdqncsfq\n1ftfffctrz7four4nine7\n\
+3onefourzdtnrmpgpfjtdl3\nsixkzkcg43eightwocs\n7fivetwo9nineseven\n\
+fivetnqzktdvd72qxpfbftwo\n2fiveqxghjglggxfour55kcfdbdnine\n\
+ninegsd6bvpdctspbmmnvdfdqfiveone\nnineone1lmkb\nlpdqbmsfive6ninenkggzxsf\n\
+z7six4ltdsevennine\n2591fbqs7\n1sevenninesix1\n3fbpxseveneight2\n\
+sixhtgmvdmxnt85cvdrlftlvtjlv262\nfoursbqmqfxzvtwoflzxjfphf9nine\n\
+twotsszxmtmvvdldqcdkvbtd7one\n1fiveeight\n4threekqgzcnssq5rjt1one33\n\
+twotwo8ljtnjnslhldgpfftkqdgdvtpj\neightsevenxqddfsgsevenhgfls4cxsspvvbsjfour\n\
+mzrrblkmhq4tkkjgprjjmrlngpfourbzpqmjlbrtgmqgcxdr\n6ctdtqxnfxqpn\n\
+1mkrznchsmdthreeclldtmmnjgdsnineqn6\n53\neighttwoxlsjdxxfive1\n\
+4fourlgszccvnjhmzflflhnsrpm\n6pnfour\n2fivetwo67cjcqseven\nfourfivehrkmpcnmg5\
+\n24kjbttvj\nfivekjsvjqvrcd4\nsixbmphnpgtsvlxpq9three872nmz\n836eight\n\
+czbrlmnlcts9three499\n72four\ngxsg311\njbfqmr33twofchnkshsjr81\n93snktwo\n\
+seven1mcxqjnsqxpngpsix5vjpgqxbmsix\nd1srlmseven65\n\
+pjnbc6twommxvninebmgqkpsixthree\ndgfnrldfdeighttwoxvvpgtzkhftjjh6\n\
+sixxgnnvtgbnn6seven\njjd2pjjps9\n8nntpzmlvknl3bsixseven8fbkhvk\nhmcj9seven3\n\
+gxqfdjgft7four8seven5\ncsgjjk6xbq4mnhmsix3nlstqqfpxtvfoneightvk\n\
+vzeight4rxfggcm17\n9eight2sevenfour3dqcxllvtf\n24npbrhgonefour7\n4two2qcxkvdk\
+\npvgksfone72foureight\n5mkfpmsvmsqfhxnzhjsqrrb8tlb\n\
+onetwofour4sjgfnjfq9nrbvtwotwo\nhgkszdcrtchgnmkzmhnone3hdlnd\n\
+8fncxdpsix54sixkcbbl9one\nvdfrczbnfhtwosrqckt9two\n\
+six17tworrlsqh7nineseventhree\ng7six\nlpl8three65hblm\n89eight1\n\
+2ninegnrqqdgvfsfive\n5five34vbvbdsix3pbbvxxdrc\n\
+txkclxnfivexcrgvln27sevenshrrjlf\nonefour47two3sevenzsxpq\nglhrvvdr2\n\
+six4fourpcvngrrndpthree8sixpdzbqcdd\ndfgkrkcr4eightthree8one\n\
+qxlnf3eight76twofivetwoseven\nvvh6fivesix\ncsppnxxdfg3\n\
+four3lkjbcfdzbdcmcsqsdlnnh5\n7two74threedsdr8\nrxnrtbjzsixfour6b\n\
+kchbtfvbnd3one237fivegjkghkkgd2\ntwo233ltdskthree\n3nine2gkbpnvninegmgqdgr\n\
+3nhpnkl7\nthreez6ninebghxmffrgkdhjbtwoseven\nfourllszfzxmf5threesixthree\n\
+38ldqlmkdkg7cjqjpjdxbkzeight\nfivefivethreeone3vjtzzcrz\nrsbhdj76three\n\
+sjkmgvhhgnsqzhsk4twotwonejf\ndcfqtcsccrvnptxrnbjdzgbmsixfourvrftknv95gztj\n\
+8gxgbblnjsd2kzszrhqlxztbxbmsixfczqtzs\nvgbzfnccxvdsvgpkthreel26\n\
+threeeight3four6sixone6six\nthreenine1foursixhszppgjbv5\n\
+sbkncfseven18qdvtssf17jn4\nphgbqgk9lstmfc8hxnfjhnstqbqztthreeeight\ngtb5seven\
+\ntheight2\n3khcnpfdmmbvld8dqckxbrqn1\nxvlfsnnbkxxs79rg99zfnzfmdjkpq\n\
+xtseven5dtqbrstgl2\neightfjzdpqcfive63rkgxstcspzpthree5\n\
+three7qntkfbtjtwothree\nthree7xgz5\n1gbzzmvpfgg\n3vhdztptqmb\nsptwonetwo2\n\
+93eightfnqngzqneightkqvlzrfour7\n15fivethreefourqpblvgzncb5seven\n\
+threethreefivenpsix53hnbv\n75fivenrsfmgzz26mtmzg4one\n9seven6631zrrjhx3\n\
+1eightp1kxvmg\ntpkjbzglxhffpnftxz2h3nxxnzrnjrnine5four\n\
+fivefivetbfnbvqsmmcfsqq69\neightgvttxgjnmrpxvctthreetwo6jfrggjmrm\n\
+twoone1threezdpmqthxf17oneightcj\n8oneone2fghmrrrpxdbmjqgnine3seven\n\
+tjrjmtqlpone6oneqdmbchplflcxvlone\nnbck42sevenhtqvjzctmqzpnnqtjpmj\n\
+foureighttwoseven525\nninehhqszsixthreebbjdvkhxjdzthfzjqvx6nine\n\
+onetnsckstxvlfour5onenine\nfour5qskksqdvpl\n5nxpxjtfp\nbbeightwo8\n\
+ninerdcninesix2four\n35kfivethreebgcpnslqh75two\none8two\n4f8three\n\
+seven6hmrqhbz72eight3\nnine5dphq\nclhcmnkkdjsixfour8fivethreebdrrgbs\n\
+6fivesixxvnzdz1eight99\nfivesevenbeightsix8\nnjzgflpxtr3drdkjqddtcsix\n\
+6fivedpq\nzhdpsdpvpnvmxbh7\ntjx13vfsevenlqftrtthszmcfnl\n6foursevenk8sixeight\
+\nseven9k\nnxkxfcjbp7five78\n79twofzttrkpbrgsixvpxbr\ngcvone98\n\
+rd31threeeightnine\njmveightwo9five\neightfive94four576\nsevenz5oneightps\n\
+ninezfsshxpl6rqpjdlzvfourlpqxb5rfprmvfrlsix\nnbxmtcs2\n\
+eightsltgcjshndmtj2nine\ndfdtwonefour5six3z8gjdx7\neighttwofive2\n\
+tgj29nine5mzhckzhkrzfours\n5onebjtfourqtpnccz\n\
+3lsevenonebpgfgonethreeeightwos\n99lqdd\nkslzrndhk5sevennine1sixlsfour5\n\
+bnndeights741\ngbrkxx4six2eight\n9twoonenzdqrs\nshcbsvtstq8threesix9\n\
+eightcjss8\nfivenine4qqnsqctcrkdhlm\nq6ninejsrmsixghvzjqghgkskqqgdgmgzplr\n\
+1sixs\nldqzccvqhznfrbthreeseven516gdzxb\nsixsrmspzp4ftrrv5three\n71onetwo\n\
+9196hftrxbj2\n4jqszj91ninegvzrsctzl\n5threeeightfivexzfqfvthreendsqnfseven\n\
+nxvfzcqlxg886\n6sevendsnsz\nnine79244onesevenone\nfiverhfvgn2sevenlcthqvfive\n\
+dzsnvjzv326vtnmg\nlzbnsk3622fivenls\nsevenfive8zghpnineeightqxsjeightthree\n\
+sevengxxxxgcdblnprdvpp8pctwofive\ngzbsp3rjfbjblktwohqslf\n\
+lbfqczsrfiveghzgkdksqggkrjvtpczlrhtrms9\none5brpbthbtrsix3\nsixgcqss52sjkm\n\
+sixkbpmsjrdt86\n978\ncmvhrjtnl73hhlcq6\ntwo23ccxsnhfszxvcncv99\n\
+eight4threeoneqtjksevenxzkqseven1\n89zzq\n\
+dxtnzqprbxtcqdnnjjjzslpmxxxjzhlhzzdk18seven\n\
+84sevensvkqxjssvrsrsevenvztvchnine\n7psfkscvgtwo4grpfhkbzxfive\n\
+kdpjpbcgjcldrfkrnrone3\n77ninendlqsp\n5nine7\nsix7mlhxjsevensevensix9\n\
+qbnggfourtwohh1\nveightwohdfdqzbkfclkxjxqjgjqjseven4\nqlfourqtbj94vdlnb16\n\
+dgmhlxqhz8ninetwo42\nnine45txjpkmhpccdkpmhqlzkvcvgmhs\nfourtwo6twonlrnt4\n\
+4qjkkl\n6sdlcshk1five6onefive3\nfive7z\n\
+5ninedszgbvnbmsggqxxbsxkzptnfxfh1vbhgnnsd\n7mcdfjvthfivesix27\nfour8six\n\
+5ptvzjjlkbttwothreedbvc\n8threefivehlggnpccck5\nhvzrkrvvheight37\n\
+2kqzgx2fxvqlfour28eight\n9lxlntmdksmfivesix4\ncjrone3four\n9qstctr8\n\
+twojrnfgrgtbldrztnd5four\n54ninetwofhvgjntvxdvhszpfklbbxrppmtsrhdeightwodbb\n\
+fournine2three2twomxlngklgs\neightninefour9four16vhrvzcnhrf\n\
+66mlkjff25jplqskbrvmdhlsz\njrjnbqqzbqfivextmcjplnxb1twoeighttsh\n\
+two9ssxpjb887\ncrdzssp9\ntwo7kdxhhrxd8eight\nninefbhhjxgcveighteighttwofive6\n\
+ptqmngxdzd2\npfcdvxjnvhfour1sixg\neight1chshckfpnxdzf1cr\n\
+bdbgr822mjsln2qvztrsnglxntdq\nsix84j1bjtshnfmc\nseven4nineeight175ninenine\n\
+968sbdfxkmrlcxj6\n854seven181lbrcv\n5sixcr9\n4fourdzfournine81\n\
+twotwo686zqhkveighttwo8\neight992lklcjtwothgl\n8eightfourxjjdtbeightpthtnhpb\n\
+5vponeeightlsbxthfpzjseven\nfffbpvmkvntkhrdgxqfxjdglsqztd5\nthree6f\n\
+nine5163jbhpzbvjcg8\nbzkfgtqnmonetpjjtbc5nvtbndtdbx\n\
+ndtsevenone3ndtljbnsixqxntsdslnnine\n8ffour283twonft\n\
+tzdrstwo2jvnqvtjfsjzsldlfx3\nsrxzlxgjpprcmt4mcljsix6eight\nfnm3oneightsdn\n\
+fourgxsixthreenine1three1hcf\nsevenonesixnine78onerdone\n\
+three3threexmtbzcjzrd\nmm6rvmbfvsgeighthzjkjnnqpsm\nfourfourtlqn1nine2\n3hg\n\
+7smbmnrhpk\nmmxkkdztxklhhfivetwo9\nsixfive36jvtnsrscchgkg\n94fr5threesixone\n\
+xf5threes\nxskoneightsixclzkkthree36three\ntwocdjjccb7sixpcnz\n\
+fjlqpshqpcdsixfive8mbjj\nx2nine33\nthreevgxzlhdpnxpgrsp4tgp2lfive\n\
+kmssbpb9fhzqhgqlsm2threethree\nsixcvfmgfx8xhfncrcqmptwovkqxjxddkdfnnkl\n\
+foursevenl5sevenjlljthmqqp4\nnine249rhqxfmxktwofourdtqrpckbhtthree\n\
+onetwo5871eight\n7dxrrnqrxgjxkvlzffourlgtqngmdlcfourllstsr\n\
+eight8four7kfcqcvdffzlzsix\nqnvgz5jvvtpvnvfneight78\nfive9six\n\
+2jztl6lnxmcqsb95six\nqx1three7npjkznmhbp3seven\nffive1onefour\n5lnhjfoureight\
+\n5573htvcvhkhb\n998zfcsninejnjcgnkd\nfive4kdcncpsevenjftzlxmqlzxlfour8\n\
+pkxfxvhlsix5seven\n3sevenzxz\n4sixninesgctmxxxx\n\
+26lrlphfive4pcpdsnlntjsixtlgjrddmkx\nhp49three48rkxmzv\nrjrllvt2twotwo16four4\
+\nseven77dccfgqbf1\nqzxgztxgsbqjshthree7sevenhvsczkqllqoneone3\neightqlnnine3\
+\nhvtmzrcxx57gghsktwoqvxdzqfoureight\n7eight2qmvdg8fdrxfzbtcrsgmhl2lfqpx\n\
+bkrbmrhvfsvm4\nninenine6six\ngzkmgrvqckrgtjchgfsixninefvffrzzln4mphqtwo\n\
+crprs2\n54tgzbrbqcljlfchpdt\nrm27two2jfpccv\n3447two3ltkbr\n9twothreeone4\n\
+llndzmsbpsevenfivebbprclghvfrpm3\nnine7kglqppgccvgbbpffqhlkk\n\
+5qkxvnchcjx8three1\nrkfmd5rnine\nsevenonehzrgeight82eight\n\
+eight63lbkjztkcjhtdt1bseven\n7kcrzxddfsixfive28one9\nsxbmvvprh1hzcjhfg\n\
+sixrtmzrcxb9\n9sevenhxkvrjz7seven8\neight3nine\n1eight24seven7kctpgv\n4437\n\
+8skmrkxc2\nsix92onesix\neighttngjnngzvvfive473five\noneseven4\n56bsrhvjtvnine\
+\n4two4seventwo4lnj2\n8mmpvxdqjnine2sevensevenf8eight\neightnineone2six\n\
+4fourn\n87six\nh6nine\nsixnnkxpxtwo394mtwo\ntwobgqqjchb2hpjsvv\n\
+snnbnf6fqtprsixmszrpvxzbxsevennmzxfive\nthree3eightqxkbvxftj358\n\
+fivefivefourfour8four3\nfivejmdpfourbgsdkmvqmf3xnbnm72\n\
+9twosixthree12xgtcqx8seven\n3jnrjlbfdk4blmpfzrpp2ninenine\n3321fivesix\n\
+1six4nnfvrxhz5kgqththreesix\nsnkszmprd2cpjrvbhlcpfqrr18oneonebkrvcnk\n\
+9fgj21nine1dtfdgm\njh6tc7xz\n3one9\n8oneqtsgxrsbsnfjlfivenine\n\
+5bcktzbvnjsvzmrlpr2dzhgqvgnine9\n4ghnqz\n7threeoneeightsevenjzqnlpsmlnfourgp1\
+\nxfgxnvdxj1\n18ftwogtmbdgmc\neight9gbnptk\n697threefive7three6\n\
+96h6bmbttcmpm4\ncmgtwo3\n6sevenxxpxzbbsdg36oneonezptwo\n\
+8fivedzpdqklxh54sljvfr92\nvg6rsevenjvrc77\nvqm55hdkzbfqsn\n8eight6\n\
+nine4eight6fourthreezmnf7\nbxlsntdmthreeninetwomzjhcdzxbktwodzrlzkcc2qjn\n\
+kztghlsgkfpkkpstfgjsxzvczpqxzchmd9\nfive1krfeight7\nfourjh5mcmpxgkfrb9\n\
+xrrh3xfgsflnh3\ncsqpfhz9\n2nine1jxlrjx\nsixeight1gcpmqtvcp3five1fzpclbtbpn\n\
+9twosix6zjnpskrtwofour\neightnr9three3sevensix\nvtwoneone7ninefive\n\
+sixdcmmtcgkmlbqlbmdcnztpseven7tbsrrbntnkeightfive\nxcjxjxlshj3four\n\
+xbccvqgmt8eighteightninemgst\nfourfive938ninehkgsjxb\nzdoneightfive8\n\
+four6five\n2fivefncninethree3kdc1rg\nthreef2threefivezfnnn\n\
+cmtsnssneightthree4\nnine64rfnvff4krtrqskx2\n414dzfxfkqkf9onefourmdxh\n\
+ninenbdkxcbjlsix7\n69hqfour2eightsix\nvkpcznjlktxthreenine5zgtxknjpcone\n\
+six4nzvnplntzthbk\n799\nponeightnthnsmkrsixgqvmzoneninetwo7\n9seven3eight\n\
+seven834eightvqdrgkxnfsdqbnfgxzvg\nqgxlnprzl4six\n\
+fourtwozdflbcvkkp3four2qnmxvdqz\n8ndrb45\nfive2gnrgdxbspqlplxtbcnn\n\
+drnrzgjsrq1\nonensdmddvsd2skbrtwosevenfzvkpnh\n4mrbkjvdz\nnphlsgmhmmzkmx79\n\
+hknkxl83twossqxcbpd\n7nqjkmmninekmhsix1jqq5\n\
+zvnmvfivesixeighttvpqnjzjsnbqdsj5foureight\nfivepr6\none5mcbonexqbhnqtcrcsix\n\
+9fourbmbhfkoneone\n78khztltsevensix\n1jmnpnjtxhcthreec924\nxptwo1\n\
+6twogblptvrxfourxmtffqcbhx27six\nkbksdcgnseventwofphftkxcjlzdld4seven\n\
+threeninevmqjrp668bjqsixnine\nhrllthree2onenmnrbljfxssmthree1\n3mxm\n\
+four1fp7d78nine\n3eight1five59nine7\neightmqhp79two7eight\n\
+dkvjxhxl8twoeightwog\nsevennzszzpcvqscttx92njhpgmhfctseven\nsix68\n\
+rqhjlt88sixtqscbgx\n8fivethree2dxjczsqeightone\nfsqlrhprtbgsdz3ftrjvtqnjnine\n\
+64onevbtdmq5cssxhvd434\nqllvxktqzkmchqthreektnpbtjnd6lfsthvrnq\n\
+7ctpnhpslzzcdtpnine8one7three\n2one5581\n1six2twonecrb\n245ninefive8\n\
+9eight335\n1eightfive\ndqljgrtgvbsix1gxjbptbhspknrzninesixone\nseven9dcthree\n\
+8eight3plkczntneightq95ll\nfnnvpn9five2onexbvmjcfour18\n\
+twoseventwosjmnnx5four\n2dlpfdd\nlxdxfngzsixseven47qcf\n\
+3ctpdv8prmhmpjbbmlsjrdcrb4nlfmklpxj9\nnine4ghsbstrhkp\nhgmggcrfmqbjrsjvhm142\n\
+lzkj2mqbfdvcxqbthree\n1xeightpcht7mn\n94vgrkqdbcsixninefour95x\n\
+foursevenvzmfd5bqddnn3twoxrcnhqsm\nbfcrq4lfsbbjqrmseven\n\
+hcntfdqcnxqfvjvl7jfppmbltwo\nfour35cmvsixfivenineqgt8\n\
+ninefive1mpzdcrhmkzhqpdmjcb\n8qtmxncgvr73\nbktrlrqvvz68clbz2seven6four\n\
+nsqhqgxjcsixzldhvcnnfivenqz2\n8eight5np\n6grqzz6sevenonep\n\
+2fivenbcpmrhxfour15\n2hhfhjjzgxz787\nxdzf595\nnine8qslr\nn241nxdkskzsevenone\n\
+25ksx49lrcroneightz\n9fourone41sevenonefive9\n8fiveninefivenine58\nnine92pzm\n\
+cbsdbjxmjkjld62fdqcrthreegdnlhhbfc\n1mtpthreebshnseven\n1mbkhbjbsmpc9three5\n\
+8lqxq27mfkgvkblrlpgvnine\nlzb21vmchthree7sevenfour\n5hxseven7jhsqlsftml\n\
+tsmvj58zone49\nkkmlxnnn4nlbvxsbnlhkjvv7\n5lprvntnlonendrjqthree6rrhl\nhtlpb9\n\
+fxqgpzgktwojmnlsix4rhffkxcrgv5\ndxdddnprdnvjscqsmqsixsixfive4\n\
+3threeeightdtwo1967\n5clzsqqhn6\ngfkqsfour747\ndgfdskvk6\n\
+6four7six5threeqgvjdg6eight\n8eighteight\n28456eightwojbg\ntwo8l\n\
+lqzthfhzfour4qsggmhhrcbldhhpq\nrlvrxninethree4\nn6sevensixtwo\n\
+2s5sixxfhhnmpjtseven\nthree9three\neight91dgfnqjffkdxcmljvfrmh4\ntwothree5\n\
+6sevens7\n8six9mnksevenkm2fdhhqvfhscqs\ntwotwoeightsixone24\nrhqnssh2nine\n\
+dhdtxxcndninethree9\nhvvfzxfivemb3\ndgbgglhmtnkrpq4four51dlpcfivefour\n\
+4qcqhrshncqseven9kvq6hmghcbfl\nx3qvkxmh3m7\n\
+cqqlrjkjbrggmccctbjzcjqktfngmmkftddponemqj17\nfivesixfoursksxqmqrmseven5\n\
+fivethreepxnxtgpgmrtwo1\n5threenine\n9five4plblgvnfcfoursixmsgfive\n\
+cqjsfxvcfdseightfour9g857\nfourthree7onegpmlrrkmtj881\ngjdvx1fourseven\n\
+lcvhmlzplhgvmnhcgthree8xdtvrck9\nfour26\n\
+qnvrspvpvqsv3xfbzrrjjnsevenvvdzknkqcmbpdlg\n22611zfive\n\
+ninegbsscnbtcnzhsevenfmfvmv3lrbthree3\ntwo76\nxhn19qninehqtbvrsdfour\n\
+fourk4cqtggvjseven\nthreecflx6xllnd\ndknmdpcqfivelvppbtone3\n\
+6dnzxninebdldgsphsppzjzpgbklbbf9gcdc\n587cdbcb2mspbgbl\n\
+twojkblghsctseven8eight\n2xmdmtgcjhd8eighttwo\nnine6qpfzxhsdsfour9\n\
+9rvqhjvmh7kcvnineccn9rzpzs\ntbsxkhhv6twozrtczg6seven\n\
+ccpeightbcvknglvcv81gcjnlnfnine9\n4twoscpht\nqdgdrtx9onefourdcvctldjnpcdjbc\n\
+cjxkxsgmql4xxgjtpdcbmsixeight\n739\>\""}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{"p1", " ", "=", " ", 
+  RowBox[{"StringReplace", "[", 
+   RowBox[{"text", ",", " ", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"\"\<one\>\"", " ", "->", " ", "\"\<1e\>\""}], ",", " ", 
+      RowBox[{"\"\<two\>\"", " ", "->", " ", "\"\<2o\>\""}], ",", " ", 
+      RowBox[{"\"\<three\>\"", " ", "->", " ", "\"\<3e\>\""}], ",", " ", 
+      RowBox[{"\"\<four\>\"", " ", "->", " ", "\"\<4r\>\""}], ",", " ", 
+      RowBox[{"\"\<five\>\"", " ", "->", " ", "\"\<5e\>\""}], ",", " ", 
+      RowBox[{"\"\<six\>\"", " ", "->", " ", "\"\<6x\>\""}], ",", " ", 
+      RowBox[{"\"\<seven\>\"", " ", "->", " ", "\"\<7n\>\""}], ",", " ", 
+      RowBox[{"\"\<eight\>\"", " ", "->", " ", "\"\<8t\>\""}], ",", "  ", 
+      RowBox[{"\"\<nine\>\"", " ", "->", " ", "\"\<9e\>\""}]}], "}"}]}], 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"cleanf", "[", "inpustr_", "]"}], " ", ":=", " ", 
+  RowBox[{"StringReplace", "[", 
+   RowBox[{"p1", ",", " ", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"\"\<one\>\"", " ", "->", " ", "\"\<1\>\""}], ",", " ", 
+      RowBox[{"\"\<two\>\"", " ", "->", " ", "\"\<2\>\""}], ",", " ", 
+      RowBox[{"\"\<three\>\"", " ", "->", " ", "\"\<3\>\""}], ",", " ", 
+      RowBox[{"\"\<four\>\"", " ", "->", " ", "\"\<4\>\""}], ",", " ", 
+      RowBox[{"\"\<five\>\"", " ", "->", " ", "\"\<5\>\""}], ",", " ", 
+      RowBox[{"\"\<six\>\"", " ", "->", " ", "\"\<6\>\""}], ",", " ", 
+      RowBox[{"\"\<seven\>\"", " ", "->", " ", "\"\<7\>\""}], ",", " ", 
+      RowBox[{"\"\<eight\>\"", " ", "->", " ", "\"\<8\>\""}], ",", "  ", 
+      RowBox[{"\"\<nine\>\"", " ", "->", " ", "\"\<9\>\""}], ",", " ", 
+      RowBox[{
+       RowBox[{"RegularExpression", "[", "\"\<[a-zA-Z]\>\"", "]"}], " ", "->",
+        " ", "\"\<\>\""}]}], "}"}]}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"parts", " ", "=", " ", 
+   RowBox[{"StringSplit", "[", 
+    RowBox[{"cleanf", "[", "text", "]"}], "]"}]}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"extractf", "[", "inpustr_", "]"}], " ", ":=", " ", 
+  RowBox[{"ToExpression", "[", 
+   RowBox[{
+    RowBox[{"StringTake", "[", 
+     RowBox[{"inpustr", ",", " ", "1"}], "]"}], " ", "<>", " ", 
+    RowBox[{"StringTake", "[", 
+     RowBox[{"inpustr", ",", " ", 
+      RowBox[{"-", "1"}]}], "]"}]}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"Map", "[", 
+  RowBox[{"extractf", ",", " ", "parts"}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{"Total", "[", 
+  RowBox[{"Map", "[", 
+   RowBox[{"extractf", ",", " ", "parts"}], "]"}], "]"}]}], "Input",
+ CellChangeTimes->{{3.910451202713825*^9, 3.9104512030731554`*^9}},
+ CellLabel->
+  "In[329]:=",ExpressionUUID->"df265653-deea-48bd-9775-ab67b3886d7c"]
+},
+WindowSize->{1920., 1011.75},
+WindowMargins->{{-6, Automatic}, {Automatic, -6}},
+FrontEndVersion->"13.2 for Microsoft Windows (64-bit) (January 30, 2023)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"ebe6da4c-4536-498c-a318-5d02888c5f77"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 2330, 46, 200, "Input",ExpressionUUID->"3fc68a69-d7b9-4f5d-b550-5c5f70604e38"],
+Cell[2891, 68, 2988, 64, 333, "Input",ExpressionUUID->"4c997c26-8452-4e6b-b3b7-cdef81201dc8"],
+Cell[5882, 134, 3635, 75, 314, "Input",ExpressionUUID->"ae8c5112-e564-4e98-b1d9-c176a2cd9d2a"],
+Cell[9520, 211, 81, 0, 28, "Input",ExpressionUUID->"92065d6b-ec4d-4f54-a6cc-e06d409d0591"],
+Cell[9604, 213, 25932, 397, 19189, "Input",ExpressionUUID->"df265653-deea-48bd-9775-ab67b3886d7c"]
+}
+]
+*)
+
