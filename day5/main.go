@@ -27,22 +27,6 @@ func newAlmanacEntry(label string) *AlmanacEntry {
     return &AlmanacEntry{
         Label: label,
         MapEntries: []*AlmanacMapEntry{},
-        Sources: []int{},
-        Destinations: []int{},
-    }
-}
-
-func (a *AlmanacEntry) ExpandRanges() () {
-    for _, e := range a.MapEntries {
-        for i := e.DestinationStart; i < e.DestinationStart + e.RangeValue; i++ {
-            a.Destinations = append(a.Destinations, i)
-        }
-        for i := e.SourceStart; i < e.SourceStart + e.RangeValue; i++ {
-            a.Sources = append(a.Sources, i)
-        }
-    }
-    if len(a.Sources) != len(a.Destinations) {
-        panic("ExpandRanges generated different sizes for source and destination")
     }
 }
 
