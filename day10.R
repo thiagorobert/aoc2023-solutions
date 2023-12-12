@@ -4,7 +4,6 @@ library("hash")
 library("stringr")
 library("Matrix")
 
-DEBUG_OUTPUT_FILE <- "day10-debug.txt"
 INPUT <- "F--F7F7|7FJ..JF-7F|77FL-L7.L.L7LFFJ-77|7.L777LF7L|FJJ-7-F|J7-7FF-7..FFF7JF--L77FL--77-7-77-|7FJ.LL.|7L7-|-FJJ.-J.F-77|F---|7.F--|--.F-7-7.F7
           FJ-|J|JJLF7F77|||FJ7J-|J|LF7.L||LJ|L77LL-JL--F--.LLJ|-..7|FJ..FJ7F.J.|7L-L7.|--F.7J||L|J.JJLFJF77|-LJ-|-J-FJ-F|J|-7|-L|JJ.L7.|-F77-FFJLLF.L-
           .||..|J.-|-JL777LJLF7LF7FFL-7-F7.F--LF7||FL.|JJ|F7J.-J.|LJ--7-JLFJ7.7L7|F7LJ7J|LL|FF|.|-7L|F7JL-LF-L7LJJ|L|7.L|-FJLLJLL-F|JLJ7JLJJ-FJ7J-LFL7
@@ -146,7 +145,15 @@ INPUT <- "F--F7F7|7FJ..JF-7F|77FL-L7.L.L7LFFJ-77|7.L777LF7L|FJJ-7-F|J7-7FF-7..FF
           ||FL-|L-JFL-.L-FF-7|.F7F77LFJL|JJ|.F.||7.L-|FJL7-7J--7--J.LL-JLL77-||77J.||---J|.J-JF7-|JFL7|||JL-7JJFJ|77-LJ7JLJ.|-J|F|J||JF|-J7|J7..|77..7
           FL..F-.J.7J-LJJ|LL-J-LL7JLJLJ..|.F7L7-F|J-LJJJ-L.LLJJ.FJL|...-.FJL-LJJLF7.J.F-J.-|LL-.LFJ.L-F-J.LJJJJL-JJF.JJL-7J-JJLLJJ-JL.LL7LJJL-7-LJJJ-."
 
+# Debug output.
+cat("", file="day10-debug.txt", append=FALSE, sep="\n")
+matrixToFile <- function (matrix) {
+    for (x in 1:nRows) {
+        cat(paste0(matrix[x, ], collapse = ""), file="day10-debug.txt", append=TRUE, sep="\n")
+    }
+}
 
+# Map of compatible types of pipes.
 pipes <- hash()
 pipes[["|"]] <- list(list("|7FS"), list(""), list(""), list("|LJS"))
 pipes[["-"]] <- list(list(""), list("-LFS"), list("-J7S"), list(""))
@@ -157,30 +164,38 @@ pipes[["F"]] <- list(list(""), list(""), list("-7JS"), list("|JLS"))
 pipes[["."]] <- list(list(""), list(""), list(""), list(""))
 pipes[["S"]] <- list(list("F7|"), list("-LF"), list("-J7"), list("|LJ"))
 
+# Helper to represent a null point.
+NULL_POINT = list(c(-1, -1))
+isNullPoint <- function (p) {
+    up <- unlist(p)
+    if (up[1] == -1 && up[2] == -1) return (TRUE)
+    return (FALSE)
+}
+
 # https://en.wikipedia.org/wiki/Von_Neumann_neighborhood
 vnNeighborhoodWithRadius <- function (targetX, targetY, maxX, maxY, radius) {
     out <- list()
     # North
      if (targetX - radius < 1) {
-         out <- append(out, list(c(-1, -1)))
+         out <- append(out, NULL_POINT)
      } else {
         out <- append(out, list(c(targetX - radius, targetY)))
      }
     # West
     if (targetY - radius < 1) {
-         out <- append(out, list(c(-1, -1)))
+         out <- append(out, NULL_POINT)
     } else {
         out <- append(out, list(c(targetX, targetY - radius)))
     }
     # East
     if (targetY + radius > maxY) {
-         out <- append(out, list(c(-1, -1)))
+         out <- append(out, NULL_POINT)
     } else {
         out <- append(out, list(c(targetX, targetY + radius)))
     }
     # South
     if (targetX + radius > maxX) {
-         out <- append(out, list(c(-1, -1)))
+         out <- append(out, NULL_POINT)
     } else {
         out <- append(out, list(c(targetX + radius, targetY)))
     }
@@ -189,18 +204,6 @@ vnNeighborhoodWithRadius <- function (targetX, targetY, maxX, maxY, radius) {
 
 vnNeighborhood <- function (targetX, targetY, maxX, maxY) {
     return (vnNeighborhoodWithRadius(targetX, targetY, maxX, maxY, 1))
-}
-
-ppDirection <- function (source, target, dIndex, compatible) {
-    dText <- ""
-    if (dIndex == 1) dText <- "N"
-    if (dIndex == 2) dText <- "W"
-    if (dIndex == 3) dText <- "E"
-    if (dIndex == 4) dText <- "S"
-    cText <- "NOT compatible"
-    if (compatible) cText <- "IS  compatible"
-
-    print(sprintf("(%s -> %s) %s: %s", source, target, dText, cText))
 }
 
 compatible <- function (source, vnn, inputMatrix) {
@@ -213,9 +216,8 @@ compatible <- function (source, vnn, inputMatrix) {
     for (n in vnn) {
         direction <- direction + 1
         isCompatible <- FALSE
-        un = unlist(n)
-        target <- "X"
-        if (un[1] != -1 && un[2] != -1) {
+        if (!isNullPoint(n)) {
+            un = unlist(n)
             target = unlist(inputMatrix[un[1], un[2]])
             strValid <- unlist(values(valid))[direction]
             isCompatible <- grepl(target, strValid, fixed=TRUE)
@@ -225,7 +227,6 @@ compatible <- function (source, vnn, inputMatrix) {
             comp <- append(comp, list(c(un[1], un[2])))
         }
         out <- append(out, isCompatible)
-        # ppDirection(source, target, direction, isCompatible)
     }
     return(comp)
 }
@@ -258,71 +259,7 @@ vnn <- vnNeighborhood(uStartPos[1], uStartPos[2], nRows, nColumns)
 available = compatible(currentTile, vnn, inputMatrix)
 
 # Crawl.
-newPlace <- function (targets, seen) {
-    for (t in targets) {
-        ut <- unlist(t)
-        old <- FALSE
-        for (s in seen) {
-            us <- unlist(s)
-            if(ut[1] == us[1] && ut[2] == us[2]) {
-                 old <- TRUE
-                 break
-             }
-        }
-        if (old) next
-        return(ut)
-    }
-    panic("newPlace: code block should be unreachable - this should never happen")
-}
-
-seen <- list()
-seen <- append(seen, list(c(uStartPos[1], uStartPos[2])))
-repeat {
-    uCurrentPos = newPlace(available, seen)
-    currentTile <- inputMatrix[uCurrentPos[1], uCurrentPos[2]][1]
-
-    # Neighbors.
-    vnn <- vnNeighborhood(uCurrentPos[1], uCurrentPos[2], nRows, nColumns)
-
-    available = compatible(currentTile, vnn, inputMatrix)
-    seen <- append(seen, list(c(uCurrentPos[1], uCurrentPos[2])))
-
-    # HACK: remove the start position from the list of nodes seen after a while.
-    if (length(seen) == 4) {
-        newSeen <- list()
-        for (s in seen) {
-            us <- unlist(s)
-            if(us[1] == uStartPos[1] && us[2] == uStartPos[2]) next
-            newSeen = append(newSeen, list(c(us[1], us[2])))
-        }
-        seen = newSeen
-    }
-
-    if (currentTile == "S") {
-        break
-    }
-}
-
-halfTotal <- length(seen) / 2
-print(sprintf("********** Part 1: the grand total: %d", halfTotal))
-
-ppListToFileComma <- function (x, ...) {
-    cat(paste0(x, collapse = ", "), file=DEBUG_OUTPUT_FILE, append=TRUE, sep="\n")
-}
-
-ppListToFile <- function (x, ...) {
-    cat(paste0(x, collapse = ""), file=DEBUG_OUTPUT_FILE, append=TRUE, sep="\n")
-}
-
-cat("*** Seen:", file=DEBUG_OUTPUT_FILE, append=FALSE, sep="\n")
-ppListToFileComma(seen)
-
-# *********************************************************************************************
-# *********************************************************************************************
-# *********************************************************************************************
-
-
-locInList <- function (x, y, seen) {
+pointInList <- function (x, y, seen) {
     old <- FALSE
     for (s in seen) {
         us <- unlist(s)
@@ -334,157 +271,93 @@ locInList <- function (x, y, seen) {
     return(old)
 }
 
-ppMatrixLine <- function (x, ...) {
-    writeLines(paste0(x, collapse = ""))
+unseenTarget <- function (targets, seen) {
+    for (t in targets) {
+        ut <- unlist(t)
+        if (pointInList(ut[1], ut[2], seen)) next
+        return(t)
+    }
+    return (NULL_POINT)
 }
 
-ppList <- function (x, ...) {
-    writeLines(paste0(x, collapse = " "))
+seen <- list()
+seen <- append(seen, list(c(uStartPos[1], uStartPos[2])))
+repeat {
+    current = unseenTarget(available, seen)
+    # No more unseen targets -- back to the starting position.
+    if (isNullPoint(current)) {
+        break
+    }
+    uCurrent <- unlist(current)
+    currentTile <- inputMatrix[uCurrent[1], uCurrent[2]][1]
+
+    # Neighbors.
+    vnn <- vnNeighborhood(uCurrent[1], uCurrent[2], nRows, nColumns)
+    available = compatible(currentTile, vnn, inputMatrix)
+    seen <- append(seen, list(current))
+}
+
+print(sprintf("********** Part 1: half of pipe length: %d", length(seen) / 2))
+
+
+data <- list()
+for (x in 1:nRows) {
+    for (y in 1:nColumns) {
+        currentTile <- inputMatrix[x, y][1]
+        if (pointInList(x, y, seen) || currentTile == ".") {
+            data <- append(data, currentTile)
+        } else {
+            data <- append(data, ".")
+        }
+    }
+}
+
+newMatrix <- matrix(data, nRows, nColumns, byrow = T)
+matrixToFile(newMatrix)
+
+ups <- function(tile) {
+    if (tile == "|" || tile == "J" || tile == "L") return (1)
+    return (0)
+}
+
+downs <- function(tile) {
+    # For this input, S is equivalent to 7 - but this varies.
+    if (tile == "|" || tile == "F" || tile == "7"  || tile == "S") return (1)
+    return (0)
 }
 
 data <- list()
-nDotsTotal <- 0
-nDotsKept <- 0
+nDotsInside <- 0
 for (x in 1:nRows) {
-    print(sprintf("processing line %d", x))
+    nUps <- 0
+    nDowns <- 0
+    inside = FALSE
     for (y in 1:nColumns) {
-        currentTile <- inputMatrix[x, y][1]
+        currentTile <- newMatrix[x, y][1]
         if (currentTile == ".") {
-            nDotsTotal <- nDotsTotal + 1
-            north <- "unknown"
-            west <- "unknown"
-            east <- "unknown"
-            south <- "unknown"
-            searchRadius = 1
-            repeat {
-                vnn <- vnNeighborhoodWithRadius(x, y, nRows, nColumns, searchRadius)
-                direction <- 0
-                for(v in vnn) {
-                    direction <- direction + 1
-                    uv <- unlist(v)
-                    if (locInList(uv[1], uv[2], seen)) {
-                        if (north == "unknown" && direction == 1) {
-                            north <- "pipe"
-                        }
-                        if (west == "unknown" && direction == 2) {
-                            west <- "pipe"
-                        }
-                        if (east == "unknown" && direction == 3) {
-                            east <- "pipe"
-                        }
-                        if (south == "unknown" && direction == 4) {
-                            south <- "pipe"
-                        }
-                    } else if (uv[1] == -1 && uv[2] == -1) {
-                        if (north == "unknown" && direction == 1) {
-                            north <- "edge"
-                        }
-                        if (west == "unknown" && direction == 2) {
-                            west <- "edge"
-                        }
-                        if (east == "unknown" && direction == 3) {
-                            east <- "edge"
-                        }
-                        if (south == "unknown" && direction == 4) {
-                            south <- "edge"
-                        }
-                    }
-                }
-                if (north != "unknown" && west != "unknown" && east != "unknown" && south != "unknown") {
-                    break
-                }
-                if (north == "edge" || west == "edge" || east == "edge" || south == "edge") {
-                    break
-                }
-                searchRadius <- searchRadius + 1
-            }
-            if (north == "edge" || west == "edge" || east == "edge" || south == "edge") {
-                data <- append(data, " ")
-            } else {
+            if (inside) {
+                nDotsInside <- nDotsInside + 1
                 data <- append(data, ".")
-                nDotsKept <- nDotsKept + 1
+            } else {
+                data <- append(data, " ")
             }
-        }
-        else if (locInList(x, y, seen)) {
-            data <- append(data, currentTile)
         } else {
-            data <- append(data, " ")
-        }
-    }
-}
-newMatrix <- matrix(data, nRows, nColumns, byrow = T)
-
-cat("*** Cleaned up input", file=DEBUG_OUTPUT_FILE, append=TRUE, sep="\n")
-for (x in 1:nRows) {
-    ppListToFile(newMatrix[x, ])
-}
-
-print(sprintf("Total number of dots: %d", nDotsTotal))
-print(sprintf("Dots kept: %d", nDotsKept))
-
-vnnSeen <- function (targetX, targetY, maxX, maxY) {
-    vnn <- vnNeighborhood(targetX, targetY, maxX, maxY)
-    out <- list()
-    for(v in vnn) {
-        uv <- unlist(v)
-        if (locInList(uv[1], uv[2], seen)) {
-            out <- append(out, list(v))
-        }
-    }
-    return(out)
-}
-
-orderByX <- function (points) {
-    ord <- order(sapply(points, `[`, 1))
-    return(points[ord])
-}
-orderByY <- function (points) {
-    ord <- order(sapply(points, `[`, 2))
-    return(points[ord])
-}
-
-pointsForX <- function(points, x) {
-    out <- list()
-    for(p in points) {
-        up = unlist(p)
-        if (up[1] == x) {
-            out <- append(out, list(p))
-        }
-    }
-    return(out)
-}
-
-seenOrdX <- orderByX(seen)
-cat("*** Seen ordered by X", file=DEBUG_OUTPUT_FILE, append=TRUE, sep="\n")
-ppListToFileComma(seenOrdX)
-
-startStopByRow <- list()
-for (x in 1:nRows) {
-    maybeSS <- list()
-    rowOrdY <- orderByY(pointsForX(seenOrdX, x))
-    ss <- list()
-    for (p in rowOrdY) {
-        up <- unlist(p)
-        n <- vnnSeen(up[1], up[2], nRows, nColumns)
-        if (length(n) == 2) {
-            ss <- append(ss, list(p))
-        }
-    }
-    startStopByRow <- append(startStopByRow, list(ss))
-}
-
-nDots <- 0
-for (x in 1:nRows) {
-    ux = unlist(startStopByRow[x])
-    if (length(ux) == 0) next
-    for (y in seq(2, length(ux), by=4)) {
-        for (py in ux[y]:ux[y + 2]) {
-            currentTile <- inputMatrix[x, py][1]
-            if (currentTile == ".") {
-                nDots <- nDots + 1
+            data <- append(data, currentTile)
+            nUps <- nUps + ups(currentTile)
+            nDowns <- nDowns + downs(currentTile)
+            if (nUps %% 2 == 1 && nDowns %% 2 == 1) {
+                inside <- TRUE
+            } else {
+                inside <- FALSE
             }
         }
     }
 }
 
-print(sprintf("********** Part 2: the grand total: %d", nDots))
+newMatrix <- matrix(data, nRows, nColumns, byrow = T)
+matrixToFile(newMatrix)
+
+print(sprintf("********** Part 2: number of tiles inside the shape: %d", nDotsInside))
+
+# Something to look into if I ever try my hand at R again: code above wraps points in lists, and
+# uses 'unlist' before consuming the points. I'm pretty sure there's a way to simplify that.
