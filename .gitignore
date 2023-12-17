@@ -2,3 +2,6 @@ day3/target
 day3/Cargo.lock
 aoc2023-solutions.iml
 .idea
+*.class
+day14/bin
+day14/obj
