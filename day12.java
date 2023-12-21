@@ -1,128 +1,111 @@
-/*
-    Wikipedia/Binomial coefficient
-    Wikipedia/Pascal's triangle
-    Wikipedia/Combination
- */
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Iterator;
-/*
-    # to install:
-    > sudo apt-get install        libcommons-math3-java
+import java.util.Map;
+import java.util.HashMap;
 
-    # see where files where installed:
-    > dpkg -L libcommons-math3-java
+// Represents a state in the search.
+class State {
+    int brokenClusterIndex;
+    int brokenClusterCount;
+    boolean expectWorking;
 
-    # use when compiling / running:
-    > javac -cp /usr/share/java/commons-math3-3.6.1.jar:. day12.java && java -cp /usr/share/java/commons-math3-3.6.1.jar:. Day12
-*/
-import org.apache.commons.math3.util.CombinatoricsUtils;
+    public State() {
+        this.brokenClusterIndex = 0;
+        this.brokenClusterCount = 0;
+        this.expectWorking = false;
+    }
+    public State(State s) {
+        this.brokenClusterIndex = s.brokenClusterIndex;
+        this.brokenClusterCount = s.brokenClusterCount;
+        this.expectWorking = s.expectWorking;
+    }
 
+    @Override
+    public int hashCode() {
+        int ew = (expectWorking) ? 1 : 0;
+        return brokenClusterIndex + brokenClusterCount + ew;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        if (this.getClass() != o.getClass()) return false;
+        State s = (State) o;
+        return this.brokenClusterIndex == s.brokenClusterIndex
+                && this.brokenClusterCount == s.brokenClusterCount
+                && this.expectWorking == s.expectWorking;
+    }
+}
+
+// Represents an line in the spring map.
 class SpringMap {
     String map;
-    List<Integer> damaged;
-    List<Integer> damagedIndices = new ArrayList<Integer>();
-    List<Integer> unkownIndices = new ArrayList<Integer>();
-    int totalDamaged;
+    List<Integer> brokenClustersSizes;
 
-    public SpringMap(String map, List<Integer> damaged) {
+    public SpringMap(String map, List<Integer> brokenClustersSizes) {
         this.map = map;
+        this.brokenClustersSizes = brokenClustersSizes;
+    }
+
+    public long countArrangements() {
+        Map<State, Long> states = new HashMap<State, Long>();
+        states.put(new State(), 1L);
+
+        // For each character in the map.
         for (int i = 0; i < this.map.length(); i++) {
-            if (map.charAt(i) == '#') {
-                this.damagedIndices.add(i);
-            } else if (map.charAt(i) == '?') {
-                this.unkownIndices.add(i);
-            } else {
-                assert false : "invalid input";
+            char current = this.map.charAt(i);
+
+            // States at current character.
+            Map<State, Long> newStates = new HashMap<State, Long>();
+
+            // For each known state so far.
+            for (Map.Entry<State, Long> entry : states.entrySet()) {
+                State s = entry.getKey();
+                long stateCount = entry.getValue();
+
+                // If at a (potential or known) broken spring cluster.
+                if ((current == '#' || current == '?')
+                        && s.brokenClusterIndex < this.brokenClustersSizes.size()
+                        && !s.expectWorking) {
+                    if (current == '?' && s.brokenClusterCount == 0) {
+                        // Not in a cluster of broken springs.
+                        newStates.put(entry.getKey(), newStates.getOrDefault(entry.getKey(), 0L) + stateCount);
+                    }
+                    // In a cluster of broken springs.
+                    int newCount = s.brokenClusterCount + 1;
+                    State newState = new State(entry.getKey());
+                    newState.brokenClusterCount = newCount;
+                    if (newCount == this.brokenClustersSizes.get(s.brokenClusterIndex)) {
+                        // Found a cluster of broken springs with the expected size...
+                        newState.brokenClusterIndex++;
+                        newState.brokenClusterCount = 0;
+                        newState.expectWorking = true;  // ... so the next character should be a working spring.
+                    }
+                    newStates.put(newState, newStates.getOrDefault(newState, 0L) + stateCount);
+                // If at a (potential or konwn) working spring.
+                } else if ((current == '.' || current == '?')
+                            && s.brokenClusterCount == 0) {
+                    State newState = new State(entry.getKey());
+                    newState.expectWorking = false;
+                    newStates.put(newState, newStates.getOrDefault(newState, 0L) + stateCount);
+                }
+            }
+            states = newStates;
+        }
+
+        // Account the states with expected number of clusters of broken springs.
+        long out = 0;
+        for (Map.Entry<State, Long> entry : states.entrySet()) {
+            if (entry.getKey().brokenClusterIndex == this.brokenClustersSizes.size()) {
+                out += entry.getValue();
             }
         }
-
-        this.damaged = damaged;
-        for (int nDamaged : this.damaged) {
-            this.totalDamaged += nDamaged;
-        }
-    }
-
-    public List<String> bruteForce() {
-        int nUnkown = this.unkownIndices.size();
-        int nKnownDamaged = this.damagedIndices.size();
-        int nToReplace = this.totalDamaged - nKnownDamaged;
-        Iterator<int[]> it = CombinatoricsUtils.combinationsIterator(nUnkown, nToReplace);
-
-        List<String> out = new ArrayList<String>();
-        while (it.hasNext()) {
-            StringBuffer alternativeMap = new StringBuffer(this.map);
-            int[] currentSet = it.next();
-            for (int i : currentSet) {
-                int unkownIndex = this.unkownIndices.get(i);
-                alternativeMap.setCharAt(unkownIndex, '#');
-            }
-            out.add(alternativeMap.toString().replaceAll("\\?", "."));
-        }
-
         return out;
-    }
-
-    public List<String> filter(List<String> allPossible) {
-        List<String> filtered = new ArrayList<String>();
-        // For every possible map.
-        for (String m : allPossible) {
-            boolean valid = true;
-            int startIndex = 0;
-            // Iterate over the set of sizes for cluster of damaged springs.
-            for(Integer expectedNDamaged : this.damaged) {
-                // This map is known to be invalid, skip further processing.
-                if (!valid) {
-                    break;
-                }
-                int nWorkingCurrent = 0;
-                int nDamagedCurrent = 0;
-                for(int i = startIndex; i < m.length() - 1; i++) {
-                    if (m.charAt(i) == '#') {
-                        // If this is a new cluster of damaged springs, reset counter
-                        // of working springs to ensure there are not working springs
-                        // within the cluster.
-                        if (nDamagedCurrent == 0) {
-                            nWorkingCurrent = 0;
-                        }
-                        nDamagedCurrent++;
-                    } else if (m.charAt(i) == '.') {
-                        nWorkingCurrent++;
-                    } else if (map.charAt(i) == '?') {
-                        // Overkill.
-                        assert false : "this should never happen";
-                    }
-                    // At the end of a cluster of damaged springs with expected size.
-                    if (nDamagedCurrent == expectedNDamaged) {
-                        // If the cluster continues, this is not a valid map.
-                        if (m.charAt(i + 1) == '#') {
-                            valid = false;
-                        }
-                        startIndex = i + 1;
-                        nDamagedCurrent = 0;
-                        nWorkingCurrent = 0;
-                        break;
-                    }
-                    // Within a possible cluster, there shouldn't be any working springs.
-                    if (nDamagedCurrent > 0 && nWorkingCurrent > 0) {
-                        valid = false;
-                        break;
-                    }
-                }
-            }
-            if (valid) {
-                filtered.add(m);
-            }
-        }
-        return filtered;
-    }
-
-    public int countArrangements() {
-        return this.filter(this.bruteForce()).size();
     }
 }
 
@@ -133,23 +116,37 @@ class Day12 {
         return Files.readAllLines(Paths.get(INPUT_FILE), StandardCharsets.UTF_8);
     }
 
+    private static long logic(List<SpringMap> springsMaps, int nRepetitions) {
+        long result = 0;
+        for (SpringMap m : springsMaps) {
+            StringBuilder newMap = new StringBuilder();
+            List<Integer> newBrokenClustersSizes = new ArrayList<Integer>();
+            for (int i = 0; i < nRepetitions; i++) {
+                newMap.append(m.map);
+                if (i != nRepetitions - 1) {
+                    newMap.append('?');
+                }
+                newBrokenClustersSizes.addAll(m.brokenClustersSizes);
+            }
+            SpringMap n = new SpringMap(newMap.toString(), newBrokenClustersSizes);
+            result += n.countArrangements();
+        }
+        return result;
+    }
+
     public static void main(String[] args) throws IOException {
         List<SpringMap> springsMaps = new ArrayList<SpringMap>();
         for(String line : readInput()) {
             String[] parts = line.split(" ", 0);
             assert parts.length == 2 : "invalid input";
-            List<Integer> damaged = new ArrayList<Integer>();
+            List<Integer> brokenClustersSizes = new ArrayList<Integer>();
             for(String d : parts[1].split(",", 0)) {
-                damaged.add(Integer.valueOf(d));
+                brokenClustersSizes.add(Integer.valueOf(d));
             }
-            springsMaps.add(new SpringMap(parts[0], damaged));
+            springsMaps.add(new SpringMap(parts[0], brokenClustersSizes));
         }
 
-        long result = 0;
-        for (SpringMap m : springsMaps) {
-            long nArrangements = m.countArrangements();
-            result += nArrangements;
-        }
-        System.out.printf("Part 1 grand total: %d\n", result);
+        System.out.printf("Part 1 grand total: %d\n", logic(springsMaps, 1));
+        System.out.printf("Part 2 grand total: %d\n", logic(springsMaps, 5));
     }
 }
