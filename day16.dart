@@ -16,7 +16,7 @@ class Beam {
     Beam(this.d, this.pos);
 
     bool valid() {
-        return (pos.$1 >= 0 && pos.$2 >= 0);
+        return this.pos != (-1, -1);
     }
 
     @override
@@ -24,8 +24,6 @@ class Beam {
         other is Beam &&
             other.d == this.d &&
             other.pos == this.pos;
-            // other.pos.$1 == this.pos.$1 &&
-            // other.pos.$2 == this.pos.$2;
 }
 
 class Matrix {
@@ -207,17 +205,20 @@ List<List<String>> getOutput(int dimSize) {
     return output;
 }
 
-void main() async {
-    final matrix = await getInput();
+int logic(Matrix matrix, Beam startBeam) {
     final output = getOutput(matrix.data.length);
-    List<Beam> current = <Beam>[new Beam(Direction.right, (0, 0))];
+    List<Beam> current = <Beam>[startBeam];
     List<Beam> seen = <Beam>[];
 
     while (current.length != 0) {
         seen.addAll(current);
+        bool addedToOut = false;
 
         List<Beam> next = <Beam>[];
         for (final e in current) {
+            if (output[e.pos.$1][e.pos.$2] == ".") {
+                addedToOut = true;
+            }
             output[e.pos.$1][e.pos.$2] = '#';
             final out = matrix.next(e);
             for (final ne in out) {
@@ -229,15 +230,53 @@ void main() async {
         }
         current = next;
     }
-
+    print("\n\n");
     int result = 0;
     for (var i = 0; i < output.length; i++) {
         final line = output[i];
+        String toPrint = "";
         for (var j = 0; j < line.length; j++) {
+            toPrint += "${line[j]}";
             if (output[i][j] == "#") {
                 result++;
             }
         }
+        print(toPrint);
     }
+    return result;
+}
+
+void part1(Matrix matrix) {
+    final result = logic(matrix, new Beam(Direction.right, (0, 0)));
     print("Part 1 grand total: $result");
+}
+
+void part2(Matrix matrix) {
+    var maxActivated = 0;
+
+    for (var i = 0; i < matrix.data.length; i++) {
+        var result = logic(matrix, new Beam(Direction.right, (i, 0)));
+        if (result > maxActivated) {
+            maxActivated = result;
+        }
+        result = logic(matrix, new Beam(Direction.left, (i, matrix.data.length - 1)));
+        if (result > maxActivated) {
+            maxActivated = result;
+        }
+        result = logic(matrix, new Beam(Direction.down, (0, i)));
+        if (result > maxActivated) {
+            maxActivated = result;
+        }
+        result = logic(matrix, new Beam(Direction.up, (matrix.data.length - 1, i)));
+        if (result > maxActivated) {
+            maxActivated = result;
+        }
+    }
+    print("Part 2 grand total: $maxActivated");
+}
+
+void main() async {
+    final matrix = await getInput();
+    part1(matrix);
+    part2(matrix);
 }
